@@ -1,0 +1,97 @@
+install react router dom 
+next make routes in frontend 
+
+
+*************** STEP 2 ************** 
+
+1 : use useState to get value 
+
+    const  [user , setUser] = useState({
+    name : "",
+    email : "",
+    password : ""
+  })
+
+
+
+2 : then add value field  in input type
+   
+    value={user.name}
+    value={user.email}
+    value={user.password}
+
+3 : then create a function to handle inputs
+
+         name="name" 
+         value={user.name}      --------------------------------------------------------------------------
+         onChange={handleInputs}                                                                          |
+                                                                                                          |
+     let name , value ;                                                                                   |     
+                                                                                                          |
+    const handleInputs = (e) => {                                                                         |
+        name = e.target.name;  // this is the name attribute which is writen in input field
+        value = e.target.value; // this is value attribute which changes according to user       < --------|
+      
+        setUser({...user,[name]:value})
+    }
+    
+
+4 : then write a function for submit form for button 
+
+    const postData = async (e) => {
+    e.preventDefault();
+
+    const {name , email , password} = user
+
+    const res= fetch('/data',{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body :JSON.stringify({
+        name , email , password
+      })
+    })
+
+    const data  = await res.json
+
+    if(data.status === 422 || !data){
+      window.alert("invalid")
+    }else{
+      window.alert("success")
+    }
+
+  }
+
+
+5 : then write a code for routes 
+
+    router.post('/data',async (req,res) => {
+    console.log("data is sucessfuly connected");
+
+    const { name, email, password} = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(422).json({ err: "Please fill all the details" });
+    }
+
+    try {
+        const userExist = await Appoinment.findOne({ email: email });
+
+        if (userExist) {
+            return res.status(422).json({ error: "Appointment already exists for this email" });
+        }
+
+        
+
+        const user = new Appoinment({
+            name,
+            email,
+            password
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})

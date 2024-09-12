@@ -1,0 +1,10 @@
+
+
+*************DATABASE CONNECTION ***************
+
+1 : npm init
+2 : npm i cors dotenv express mongoose nodemon
+3 : mkdir db middlewares model routes 
+4 : add .env file 
+5 : write a code in index.js
+6 : write a connection code in db folder 

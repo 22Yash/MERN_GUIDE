@@ -1,0 +1,2 @@
+1: create a client and server folder
+
